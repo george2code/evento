@@ -24,6 +24,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 npm i clsx - for active menu
 npm i framer-motion@10.16.4 - frontend UI effects
+npm i tailwind-merge@2.0.0
 
 
 ## Learn More
