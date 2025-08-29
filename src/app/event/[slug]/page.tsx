@@ -1,5 +1,5 @@
 import H1 from '@/components/h1'
-import { getEvent } from '@/lib/utils';
+import { getEvent } from '@/lib/server-utils';
 import { Metadata } from 'next';
 import { Chilanka } from 'next/font/google';
 import Image from 'next/image';
@@ -19,6 +19,19 @@ export async function generateMetadata({params}: EventPageProps): Promise<Metada
     title: event.name,
   };
 }
+
+
+// Pre-generate pages for popular routes (slug categories)
+export async function generateStaticParams() {
+  // top 100 most popualr events
+  return [{
+    slug: 'comedy-extravaganza'
+  }, {
+    slug: 'dj-practice-session'
+  }];
+}
+
+
 
 export default async function EventPage({ params }: EventPageProps) {
 

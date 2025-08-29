@@ -26,6 +26,34 @@ npm i clsx - for active menu
 npm i framer-motion@10.16.4 - frontend UI effects
 npm i tailwind-merge@2.0.0
 
+npm i prisma@5.6.0 --save-dev
+npx prisma init --datasource-provider sqlite
+
+// add models to schem.prisma file
+npx prisma db push
+
+npx prisma studio   // cal studio
+
+create seed.ts file 
+
+add to package.json, to run seed file with ts compiler:
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
+
+npm i ts-node@10.9.1 --save-dev
+
+npx run prisma db seed  // run seed.ts file
+
+
+npm i @radix-ui/react-icons@1.3.0
+
+npm i zod@3.22.4
+
+npm i server-only
+
+
+
 
 ## Learn More
 

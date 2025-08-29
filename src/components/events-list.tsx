@@ -1,13 +1,16 @@
-import { EventoEvent } from '@/lib/types'
+// import { EventoEvent } from '@/lib/types'
+import { EventEvento } from '@prisma/client';
 import React from 'react'
 import EventCard from './event-card';
-import { getEvents, sleep } from '@/lib/utils';
+import { getEvents } from '@/lib/server-utils';
+import PaginationControls from './pagination-controls';
 
 type EvetsListProps = {
     city: string;
+    page?: number;
 };
 
-export default async function EventsList({ city }: EvetsListProps) {
+export default async function EventsList({ city, page = 1 }: EvetsListProps) {
 
   // await sleep(2000);
 
@@ -21,7 +24,10 @@ export default async function EventsList({ city }: EvetsListProps) {
   // );
   // const events: EventoEvent[] = await response.json();
 
-  const events = await getEvents(city);
+  const { events, totalCount } = await getEvents(city, page);
+
+  const previousPath = page > 1 ? `/events/${city}?page=${page - 1}` : '';
+  const nextPath =  totalCount > 6 * page ? `/events/${city}?page=${page + 1}` : '';
 
   return (
     <section className="max-w-[1100px] flex flex-wrap gap-10 justify-center px-[20px]">
@@ -30,6 +36,8 @@ export default async function EventsList({ city }: EvetsListProps) {
             <EventCard key={event.id} event={event} />
         ))
       }
+
+      <PaginationControls previousPath={previousPath} nextPath={nextPath}></PaginationControls>
     </section>
   );
 }

@@ -1,16 +1,20 @@
 import EventsList from '@/components/events-list';
 import H1 from '@/components/h1';
-import { EventoEvent } from '@/lib/types';
 import React, { Suspense } from 'react'
 import Loading from './loading';
-import { Metadata } from 'next';
 import { capitalize } from '@/lib/utils';
+import { useSearchParams } from 'next/navigation';
+import { z } from 'zod';
 
 type Props = {
   params: {
     city: string;
   };
 };
+
+type EventsPageProps = Props & {
+  searchParams: { [key: string]: string | string[] | undefined };
+}
 
 export function generateMetadata({params}: Props) {
   const city = params.city;
@@ -20,8 +24,17 @@ export function generateMetadata({params}: Props) {
   }
 }
 
-export default async function EventsPage({ params }: Props) {
+// Zod validation rule
+const pageNumberSchema = z.coerce.number().int().positive().optional();
+
+export default async function EventsPage({ params, searchParams }: EventsPageProps) {
   const city = params.city;
+  const parsedPage = pageNumberSchema.safeParse(searchParams.page);
+  // const page = searchParams.page || 1;  // || - if undefined (or empty, or 0) set 1
+
+  if (!parsedPage.success) {
+    throw new Error("Invalid page number");
+  }
 
   return (
     <main className="flex flex-col items-center py-24 px-[20px] min-h-[110vh]">
@@ -30,11 +43,12 @@ export default async function EventsPage({ params }: Props) {
          { city !== 'all' && `Events in ${capitalize(city)}`}
       </H1>
 
-      <Suspense fallback={<Loading />}>
-        <EventsList city={city} />
+      {/* if city or page changes, suspense work because unique key is changed */}
+      <Suspense key={ city + parsedPage.data } fallback={<Loading />}>
+        <EventsList city={city} page={parsedPage.data} />
       </Suspense>
     </main>
-  )
+  );
 }
 
 

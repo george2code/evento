@@ -1,13 +1,14 @@
 'use client';
 
-import { EventoEvent } from '@/lib/types'
+// import { EventoEvent } from '@/lib/types'
+import { EventEvento } from '@prisma/client';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useRef } from 'react'
 
 type EventCardProps = {
-    event: EventoEvent;
+    event: EventEvento;
 };
 
 const MotionLink = motion(Link)
